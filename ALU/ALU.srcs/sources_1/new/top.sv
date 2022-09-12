@@ -36,7 +36,7 @@
     
 endmodule*/
 
-module top(
+/*module top(
     input [15:0] SW,
     output [15:0] LED
     );
@@ -48,4 +48,40 @@ assign LED[10:6] = ~SW[10:6];
 assign LED[13:11] = {SW[11], SW[12], SW[13]};
 assign LED[15:14] = { 2{SW[14]} };
 
-endmodule
+endmodule*/
+
+
+/*module top(
+    input [6:0] SW,
+    output CA,
+    output CB,
+    output CC,
+    output CD,
+    output CE,
+    output CF,
+    output CG,
+    output [7:0] AN
+    );
+    
+logic [6:0] disp;
+assign disp = {CA,CB,CC,CD,CE,CF,CG};
+assign AN[0] = 0;
+assign AN[7:1] = 1;
+
+always_comb begin
+    case(SW)
+    7'd0: disp <= 0000001;
+    7'd1: disp <= 0011111;
+    7'd2: disp <= 0010010;
+    7'd3: disp <= 0000110;
+    7'd4: disp <= 1001100;
+    7'd5: disp <= 0100100;
+    7'd6: disp <= 0100000;
+    7'd7: disp <= 0001111;
+    7'd8: disp <= 0000000;
+    7'd9: disp <= 0000100;
+    default: disp <= 0000000;
+    endcase    
+end
+
+endmodule*/
