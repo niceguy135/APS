@@ -1,0 +1,17 @@
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: D:/Xilinx/Vivado/2019.2/bin/unwrapped/win64.o/xelab.exe -wto f09e49dedff943f9af3cdcc00e3d0806 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot memory_test_behav xil_defaultlib.memory_test xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 6 differs from formal bit length 5 for port 'adr1' [C:/Users/8200390/Desktop/Arcitechture/Lab2/Lab2.srcs/sim_1/new/memory_test.sv:49]
+WARNING: [VRFC 10-3091] actual bit length 6 differs from formal bit length 5 for port 'adr2' [C:/Users/8200390/Desktop/Arcitechture/Lab2/Lab2.srcs/sim_1/new/memory_test.sv:50]
+WARNING: [VRFC 10-3091] actual bit length 6 differs from formal bit length 5 for port 'adr3' [C:/Users/8200390/Desktop/Arcitechture/Lab2/Lab2.srcs/sim_1/new/memory_test.sv:51]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.memory
+Compiling module xil_defaultlib.memory_test
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot memory_test_behav

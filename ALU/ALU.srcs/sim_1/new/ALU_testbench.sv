@@ -41,7 +41,7 @@ module ALU_testbench(
     
     initial begin
         A = 5;
-        B = 8; 
+        B = 9; 
         ALUOp = ADD; //SUM;
         #10;
         if(Result == 13) $display("Good!");

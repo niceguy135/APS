@@ -1,6 +1,6 @@
 webtalk_init -webtalk_dir C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/
 webtalk_register_client -client project
-webtalk_add_data -client project -key date_generated -value "Mon Sep 12 17:58:43 2022" -context "software_version_and_target_device"
+webtalk_add_data -client project -key date_generated -value "Mon Sep 26 14:42:48 2022" -context "software_version_and_target_device"
 webtalk_add_data -client project -key product_version -value "XSIM v2019.2 (64-bit)" -context "software_version_and_target_device"
 webtalk_add_data -client project -key build_version -value "2708876" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_platform -value "WIN64" -context "software_version_and_target_device"
@@ -14,7 +14,7 @@ webtalk_add_data -client project -key target_package -value "not_applicable" -co
 webtalk_add_data -client project -key target_speed -value "not_applicable" -context "software_version_and_target_device"
 webtalk_add_data -client project -key random_id -value "4b1f393c-8501-47c0-b14a-0c280ce51e60" -context "software_version_and_target_device"
 webtalk_add_data -client project -key project_id -value "830517b277264a7c80fdfde3e5dde9a6" -context "software_version_and_target_device"
-webtalk_add_data -client project -key project_iteration -value "4" -context "software_version_and_target_device"
+webtalk_add_data -client project -key project_iteration -value "7" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_name -value "Windows Server 2016 or Windows 10" -context "user_environment"
 webtalk_add_data -client project -key os_release -value "major release  (build 9200)" -context "user_environment"
 webtalk_add_data -client project -key cpu_name -value "Intel(R) Core(TM) i5-8500 CPU @ 3.00GHz" -context "user_environment"
@@ -27,6 +27,6 @@ webtalk_add_data -client xsim -key trace_waveform -value "true" -context "xsim\\
 webtalk_add_data -client xsim -key runtime -value "1 us" -context "xsim\\usage"
 webtalk_add_data -client xsim -key iteration -value "0" -context "xsim\\usage"
 webtalk_add_data -client xsim -key Simulation_Time -value "0.01_sec" -context "xsim\\usage"
-webtalk_add_data -client xsim -key Simulation_Memory -value "6000_KB" -context "xsim\\usage"
-webtalk_transmit -clientid 812753036 -regid "" -xml C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.xml -html C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.html -wdm C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
+webtalk_add_data -client xsim -key Simulation_Memory -value "6040_KB" -context "xsim\\usage"
+webtalk_transmit -clientid 893274464 -regid "" -xml C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.xml -html C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.html -wdm C:/Users/8200390/Desktop/Arcitechture/ALU/ALU.sim/sim_1/behav/xsim/xsim.dir/ALU_testbench_behav/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
 webtalk_terminate
