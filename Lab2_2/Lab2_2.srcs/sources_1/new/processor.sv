@@ -24,7 +24,8 @@ module processor(
     input           clk,
     input           rst,
     input  [31:0]   IN,
-    output [31:0]   OUT
+    output [31:0]   OUT1,
+    output [31:0]   OUT2
     );
     
     logic [31:0] Instr;         //линия инструкций
@@ -42,6 +43,9 @@ module processor(
     logic [7:0]  toPC;          //Провод, покоторому передаются номера программы
     
     logic [7:0]  toSummator;
+    
+    assign OUT1 = Oper1;
+    assign OUT2 = Oper2;
     
     instr_memory ins_mem(
         .A(PCClock),

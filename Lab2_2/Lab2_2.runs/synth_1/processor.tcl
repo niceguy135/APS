@@ -28,6 +28,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/02dan/myAPSlabs/APS/Lab2_2/Lab2_2.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
+read_mem C:/Users/02dan/myAPSlabs/APS/Lab2_2/Lab2_2.srcs/sources_1/new/programs.mem
 read_verilog -library xil_defaultlib -sv {
   C:/Users/02dan/myAPSlabs/APS/ALU_2/ALU_2.srcs/sources_1/new/alu_riscv.sv
   C:/Users/02dan/myAPSlabs/APS/Lab2_2/Lab2_2.srcs/sources_1/new/instr_memory.sv
