@@ -2,7 +2,7 @@
 
 module instr_memory #(
     int WIDTH = 32,
-    int DEPTH = 64
+    int DEPTH = 256
 )(
     input logic [$clog2(DEPTH)-1:0] A,
     output logic [WIDTH-1:0] D
