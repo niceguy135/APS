@@ -24,10 +24,7 @@ module processor(
     input           clk,
     input           rst,
     input  [31:0]   IN,
-    output [31:0]   OUT1,
-    output [31:0]   OUT2,
-    output [31:0]   Programm,
-    output [7:0]    PCNum
+    output [31:0]   OUT1
     );
 
     logic [31:0] Instr;
@@ -48,24 +45,29 @@ module processor(
     logic [7:0]  PC_Counter;
     
     
+    
     assign WriteEn = Instr[29] | Instr[28];
     assign Addr1 =   Instr[22:18];
     assign Addr2 =   Instr[17:13];
     assign Addr3 =   Instr[4:0];
     
     
-    assign Operation = Instr[27:23];
-    assign OUT1 =      Operand1;
-    assign OUT2 =      Operand2;
-    
+    assign Operation =    Instr[27:23];
+    assign OUT1 =         Operand1;
     
     assign PC_OptionAND = ALUFlag & Instr[30];
-    assign PC_OptionOR  = PC_OptionAND & Instr[31];
+    assign PC_OptionOR  = PC_OptionAND | Instr[31];
     assign PC_Jump =      Instr[12:5];
     
     
-    assign newPC = PC_Counter + to_PC_Summutor;
+    assign newPC =     PC_Counter + to_PC_Summutor;
     
+    assign SE_In =     Instr[27:5];
+    
+    assign WD3Option = Instr[29:28];
+    
+    
+    assign SE_Out = {{9{SE_In[22]}}, SE_In};
     
     always_comb begin                               //описание мультиплексора для WD
         case(WD3Option)
@@ -113,12 +115,6 @@ module processor(
         .Flag  ( ALUFlag ),
         .Result( ALUResult )
     );
-
-    
-    
-     //test shit
-    assign Programm = Instr;
-    assign PCNum = PC_Counter;
     
     
 endmodule
