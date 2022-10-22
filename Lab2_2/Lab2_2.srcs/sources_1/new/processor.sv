@@ -23,8 +23,11 @@
 module processor(
     input           clk,
     input           rst,
-    input  [31:0]   IN,
-    output [31:0]   OUT1
+//    input  [31:0]   IN,
+    input  [15:0]   SW,
+    input           BTNC,
+    output [15:0]   LED
+//    output [31:0]   OUT1
     );
 
     logic [31:0] Instr;
@@ -44,6 +47,12 @@ module processor(
     logic [7:0]  newPC;
     logic [7:0]  PC_Counter;
     
+    logic [31:0] IN;
+    logic [31:0] OUT1;
+    
+    assign IN = {{16{SW[15]}}, SW[15:0]};
+    assign LED = BTNC ? OUT1[15:0] : OUT1[31:16];
+    
     
     
     assign WriteEn = Instr[29] | Instr[28];
@@ -53,7 +62,7 @@ module processor(
     
     
     assign Operation =    Instr[27:23];
-    assign OUT1 =         Operand1;
+    assign OUT1 =         ALUResult;
     
     assign PC_OptionAND = ALUFlag & Instr[30];
     assign PC_OptionOR  = PC_OptionAND | Instr[31];
