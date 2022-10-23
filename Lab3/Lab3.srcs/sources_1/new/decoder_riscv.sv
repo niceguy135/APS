@@ -59,30 +59,30 @@ module decoder_riscv (
 
   import ALUOps::*;
 
-  //first column of option 
+//  //first column of option 
   logic [6:0]  opcode = fetched_instr_i[6:0];
   
-  //second column
-  logic [4:0]  rd     = fetched_instr_i[11:7];
-  logic [4:0]  imm2_s = fetched_instr_i[11:7];
-  logic [4:0]  imm2_b = {fetched_instr_i[4:1],fetched_instr_i[11]};
+//  //second column
+//  logic [4:0]  rd     = fetched_instr_i[11:7];
+//  logic [4:0]  imm2_s = fetched_instr_i[11:7];
+//  logic [4:0]  imm2_b = {fetched_instr_i[4:1],fetched_instr_i[11]};
   
-  //third column
+//  //third column
   logic [2:0]  func3  = fetched_instr_i[14:12];
-  logic [19:0] imm_u  = fetched_instr_i[31:12];
-  logic [19:0] imm_j  = fetched_instr_i[31:12];
+//  logic [19:0] imm_u  = fetched_instr_i[31:12];
+//  logic [19:0] imm_j  = fetched_instr_i[31:12];
   
-  //forth column
+//  //forth column
   logic [4:0]  rs1    = fetched_instr_i[19:15];
   
-  //fifth column
+//  //fifth column
   logic [4:0]  rs2    = fetched_instr_i[24:20];
-  logic [11:0] imm_i  = fetched_instr_i[31:20];
+//  logic [11:0] imm_i  = fetched_instr_i[31:20];
   
-  //sex column
+//  //sex column
   logic [6:0]  func7  = fetched_instr_i[31:25];
-  logic [6:0]  imm1_s = fetched_instr_i[31:25];
-  logic [6:0]  imm1_b = fetched_instr_i[31:25];
+//  logic [6:0]  imm1_s = fetched_instr_i[31:25];
+//  logic [6:0]  imm1_b = fetched_instr_i[31:25];
   
   always_comb begin
        case(opcode)
@@ -196,7 +196,54 @@ module decoder_riscv (
                illegal_instr_o <= 0;
                jalr_o          <= 0;
           end
-///////////////////////////////////////////////////////////////////////////////////////////        
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b0100011: begin                         // Save to memory
+                case(func3)
+                   7'h00: mem_size_o   <= 3'd0;
+                   7'h01: mem_size_o   <= 3'd1;
+                   7'h02: mem_size_o   <= 3'd2;
+                endcase
+               
+               gpr_we_a_o      <= 0;
+               ex_op_a_sel_o   <= 0;
+               ex_op_b_sel_o   <= 1;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 1;
+               mem_req_o       <= 1;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 0;
+               illegal_instr_o <= 0;
+               jalr_o          <= 0;
+          end
+/////////////////////////////////////////////////////////////////////////////////////////// 
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b0100011: begin                         // Branches (B-operations)
+                case(func3)
+                   7'h00: alu_op_o      <= BEQ;
+                   7'h01: alu_op_o      <= BNE;
+                   7'h04: alu_op_o      <= BLT;
+                   7'h05: alu_op_o      <= BGE;
+                   7'h06: alu_op_o      <= BLTU;
+                   7'h07: alu_op_o      <= BGEU;
+                endcase
+               
+               gpr_we_a_o      <= 0;
+               ex_op_a_sel_o   <= 1;
+               ex_op_b_sel_o   <= 1;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 1;
+               jal_o           <= 1;
+               illegal_instr_o <= 0;
+               jalr_o          <= 0;
+          end
+///////////////////////////////////////////////////////////////////////////////////////////       
        endcase
   end
 
