@@ -59,35 +59,35 @@ module decoder_riscv (
 
   import ALUOps::*;
 
-//  //first column of option 
-  logic [6:0]  opcode = fetched_instr_i[6:0];
+  logic [6:0]  opcode;
+  assign opcode = fetched_instr_i[6:0];
   
-//  //second column
-//  logic [4:0]  rd     = fetched_instr_i[11:7];
-//  logic [4:0]  imm2_s = fetched_instr_i[11:7];
-//  logic [4:0]  imm2_b = {fetched_instr_i[4:1],fetched_instr_i[11]};
+  logic [2:0]  func3;
+  assign func3  = fetched_instr_i[14:12];
   
-//  //third column
-  logic [2:0]  func3  = fetched_instr_i[14:12];
-//  logic [19:0] imm_u  = fetched_instr_i[31:12];
-//  logic [19:0] imm_j  = fetched_instr_i[31:12];
+  logic [4:0]  rs1;
+  assign rs1    = fetched_instr_i[19:15];
   
-//  //forth column
-  logic [4:0]  rs1    = fetched_instr_i[19:15];
+  logic [4:0]  rs2;
+  assign rs2    = fetched_instr_i[24:20];
   
-//  //fifth column
-  logic [4:0]  rs2    = fetched_instr_i[24:20];
-//  logic [11:0] imm_i  = fetched_instr_i[31:20];
-  
-//  //sex column
-  logic [6:0]  func7  = fetched_instr_i[31:25];
-//  logic [6:0]  imm1_s = fetched_instr_i[31:25];
-//  logic [6:0]  imm1_b = fetched_instr_i[31:25];
+  logic [6:0]  func7;
+  assign func7  = fetched_instr_i[31:25];
+
   
   always_comb begin
+       illegal_instr_o <= 0;
+       
        case(opcode)
+          7'b0001111: begin
+          
+                illegal_instr_o <= 0;
+                mem_req_o <= 0;
+                gpr_we_a_o <= 0;
+                
+           end
 /////////////////////////////////////////////////////////////////////////////////////////       
-          7'b0110011: begin                               // R options
+          7'b0110011: begin                            // R options
                case(func7)
                    7'h00:
                         case(func3)
@@ -106,13 +106,18 @@ module decoder_riscv (
                               3'h2: alu_op_o      <= SLT;
                                     
                               3'h3: alu_op_o      <= SLTU;
+                              
+                              default: illegal_instr_o <= 1;
                         endcase
                    
                    7'h20:
                         case(func3)
                               3'h0: alu_op_o      <= SUB;
                               3'h5: alu_op_o      <= SRA;
+                              default: illegal_instr_o <= 1;
                         endcase
+                        
+                   default: illegal_instr_o <= 1;
 
                endcase
                
@@ -125,7 +130,6 @@ module decoder_riscv (
                wb_src_sel_o    <= 0;
                branch_o        <= 0;
                jal_o           <= 0;
-               illegal_instr_o <= 0;
                jalr_o          <= 0;
           end
 //////////////////////////////////////////////////////////////////////////////////          
@@ -139,9 +143,16 @@ module decoder_riscv (
                               3'h1: alu_op_o      <= SLL;
                                     
                               3'h5: alu_op_o      <= SRL;
+                              
+                              default: illegal_instr_o <= 1;
                         endcase
                         
-                   7'h20:           alu_op_o      <= SRA;
+                   7'h20:           
+                        case(func3)
+                              3'h5: alu_op_o      <= SRA;
+                              
+                              default: illegal_instr_o <= 1;
+                        endcase
                    
                    default:
                         case(func3)
@@ -156,6 +167,8 @@ module decoder_riscv (
                               3'h2: alu_op_o      <= SLT;
                               
                               3'h3: alu_op_o      <= SLTU;
+                              
+                              default: illegal_instr_o <= 1;
                         endcase
                         
                endcase
@@ -169,7 +182,6 @@ module decoder_riscv (
                wb_src_sel_o    <= 0;
                branch_o        <= 0;
                jal_o           <= 0;
-               illegal_instr_o <= 0;
                jalr_o          <= 0;
           end
 /////////////////////////////////////////////////////////////////////////////////// 
@@ -182,6 +194,7 @@ module decoder_riscv (
                    7'h02: mem_size_o   <= 3'd2;
                    7'h04: mem_size_o   <= 3'd4;
                    7'h05: mem_size_o   <= 3'd5;
+                   default: illegal_instr_o <= 1;
                 endcase
                
                gpr_we_a_o      <= 1;
@@ -193,7 +206,6 @@ module decoder_riscv (
                wb_src_sel_o    <= 1;
                branch_o        <= 0;
                jal_o           <= 0;
-               illegal_instr_o <= 0;
                jalr_o          <= 0;
           end
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -204,24 +216,24 @@ module decoder_riscv (
                    7'h00: mem_size_o   <= 3'd0;
                    7'h01: mem_size_o   <= 3'd1;
                    7'h02: mem_size_o   <= 3'd2;
+                   default: illegal_instr_o <= 1;
                 endcase
                
                gpr_we_a_o      <= 0;
                ex_op_a_sel_o   <= 0;
-               ex_op_b_sel_o   <= 1;
+               ex_op_b_sel_o   <= 3;
                alu_op_o        <= ADD;
                mem_we_o        <= 1;
                mem_req_o       <= 1;
                wb_src_sel_o    <= 0;
                branch_o        <= 0;
                jal_o           <= 0;
-               illegal_instr_o <= 0;
                jalr_o          <= 0;
           end
 /////////////////////////////////////////////////////////////////////////////////////////// 
 
 ///////////////////////////////////////////////////////////////////////////////////
-          7'b0100011: begin                         // Branches (B-operations)
+          7'b1100011: begin                         // Branches (B-operations)
                 case(func3)
                    7'h00: alu_op_o      <= BEQ;
                    7'h01: alu_op_o      <= BNE;
@@ -229,22 +241,120 @@ module decoder_riscv (
                    7'h05: alu_op_o      <= BGE;
                    7'h06: alu_op_o      <= BLTU;
                    7'h07: alu_op_o      <= BGEU;
+                   default: illegal_instr_o <= 1;
                 endcase
                
                gpr_we_a_o      <= 0;
-               ex_op_a_sel_o   <= 1;
-               ex_op_b_sel_o   <= 1;
+               ex_op_a_sel_o   <= 0;
+               ex_op_b_sel_o   <= 0;
                mem_we_o        <= 0;
                mem_req_o       <= 0;
                mem_size_o      <= 0;
                wb_src_sel_o    <= 0;
                branch_o        <= 1;
-               jal_o           <= 1;
-               illegal_instr_o <= 0;
+               jal_o           <= 0;
                jalr_o          <= 0;
           end
-///////////////////////////////////////////////////////////////////////////////////////////       
+///////////////////////////////////////////////////////////////////////////////////////////  
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b1101111: begin                         // Jump and Link
+               
+               gpr_we_a_o      <= 1;
+               ex_op_a_sel_o   <= 1;
+               ex_op_b_sel_o   <= 4;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 1;
+               jalr_o          <= 0;
+               illegal_instr_o <= 0;
+          end
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b1100111: begin                         // Jump and Link Register
+               
+               case(func3)
+                   3'h00:   illegal_instr_o <= 0;
+                   default: illegal_instr_o <= 1;
+                endcase
+               
+               gpr_we_a_o      <= 1;
+               ex_op_a_sel_o   <= 1;
+               ex_op_b_sel_o   <= 4;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 0;
+               jalr_o          <= 1;
+     
+          end
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b0110111: begin                         // LUI - operation
+               
+               gpr_we_a_o      <= 1;
+               ex_op_a_sel_o   <= 2;
+               ex_op_b_sel_o   <= 2;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 0;
+               jalr_o          <= 0;
+               illegal_instr_o <= 0;
+          end
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b0010111: begin                         // AUIPC
+               
+               gpr_we_a_o      <= 1;
+               ex_op_a_sel_o   <= 1;
+               ex_op_b_sel_o   <= 2;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 0;
+               jalr_o          <= 0;
+               illegal_instr_o <= 0;
+          end
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+          7'b1110011: begin                         // no OPS
+               
+               gpr_we_a_o      <= 0;
+               ex_op_a_sel_o   <= 0;
+               ex_op_b_sel_o   <= 0;
+               alu_op_o        <= ADD;
+               mem_we_o        <= 0;
+               mem_req_o       <= 0;
+               mem_size_o      <= 0;
+               wb_src_sel_o    <= 0;
+               branch_o        <= 0;
+               jal_o           <= 0;
+               jalr_o          <= 0;
+               illegal_instr_o <= 0;
+          end
+///////////////////////////////////////////////////////////////////////////////////////////  
+
+       default: illegal_instr_o <= 1;   
        endcase
+       
   end
 
 
