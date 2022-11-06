@@ -1,129 +1,182 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09.10.2022 16:16:13
-// Design Name: 
-// Module Name: processor
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module processor(
-    input           clk,
-    input           rst,
-//    input  [31:0]   IN,
-    input  [15:0]   SW,
-    input           BTNC,
-    output [15:0]   LED
-//    output [31:0]   OUT1
+    input         clk,
+    input         rst,
+    input  [15:0] SW,
+    input         BTNC,
+    output [15:0] LED
+    );
+    
+
+//////////////////////////////////////////// Описание Instraction Memory
+    logic [31:0]  PC_Line;
+    logic [31:0]  Instr;
+    
+    instr_memory InstMem(
+        A(PC_Line),
+        D(Instr)
+    );
+////////////////////////////////////////////
+    
+    
+////////////////////////////////////////////  Описание входящего и выходящих сигналов из дешифратора
+    logic         fetched_instr_i;  
+    logic [1:0]   ex_op_a_sel_o;      
+    logic [2:0]   ex_op_b_sel_o;      
+    logic [4:0]   alu_op_o;           
+    logic         mem_req_o;          
+    logic         mem_we_o;           
+    logic [2:0]   mem_size_o;         
+    logic         gpr_we_a_o;         
+    logic         wb_src_sel_o;       
+    logic         illegal_instr_o;    
+    logic         branch_o;           
+    logic         jal_o;              
+    logic         jalr_o;
+    
+    assign fetched_instr_i = Instr;
+    
+    decoder_riscv Decode(
+        fetched_instr_i,  
+        ex_op_a_sel_o,      
+        ex_op_b_sel_o,      
+        alu_op_o,           
+        mem_req_o,          
+        mem_we_o,           
+        mem_size_o,         
+        gpr_we_a_o,         
+        wb_src_sel_o,       
+        illegal_instr_o,    
+        branch_o,           
+        jal_o,              
+        jalr_o
+    );
+///////////////////////////////////////////
+
+/////////////////////////////////////////// Описание Register File
+
+    logic [4:0]  adr1;
+    logic [4:0]  adr2;
+    logic [4:0]  adr3;
+    logic [31:0] wd;
+    logic        we;
+    logic [31:0] rd1;
+    logic [31:0] rd2;
+    
+    assign       adr1 = Instr[19:15];
+    assign       adr2 = Instr[24:20];
+    assign       adr3 = Instr[11:7];
+    
+    assign       we = gpr_we_a_o;
+    
+    memory RegFile(
+        clk,
+        adr1,
+        adr2,
+        adr3,
+        wd,
+        we,
+        rd1,
+        rd2
     );
 
-    logic [31:0] Instr;
-    logic [4:0]  Operation;
-    logic        WriteEn;
-    logic [4:0]  Addr1, Addr2, Addr3;
-    logic [1:0]  WD3Option;
-    logic [31:0] WD;
-    logic [22:0] SE_In;
-    logic [31:0] SE_Out;
-    logic [31:0] Operand1, Operand2;
+///////////////////////////////////////////
+
+/////////////////////////////////////////// Соединение АЛУ
+
+    logic [31:0] Operand1;
+    logic [31:0] Operand2;
+    logic        comp;
     logic [31:0] ALUResult;
-    logic        ALUFlag;
-    logic        PC_OptionAND, PC_OptionOR;
-    logic [7:0]  to_PC_Summutor;
-    logic [7:0]  PC_Jump;
-    logic [7:0]  newPC;
-    logic [7:0]  PC_Counter;
-    
-    logic [31:0] IN;
-    logic [31:0] OUT1;
-    
-    assign IN = {{16{SW[15]}}, SW[15:0]};
-    assign LED = BTNC ? OUT1[15:0] : OUT1[31:16];
-    
-    
-    
-    assign WriteEn = Instr[29] | Instr[28];
-    assign Addr1 =   Instr[22:18];
-    assign Addr2 =   Instr[17:13];
-    assign Addr3 =   Instr[4:0];
-    
-    
-    assign Operation =    Instr[27:23];
-    assign OUT1 =         ALUResult;
-    
-    assign PC_OptionAND = ALUFlag & Instr[30];
-    assign PC_OptionOR  = PC_OptionAND | Instr[31];
-    assign PC_Jump =      Instr[12:5];
-    
-    
-    assign newPC =     PC_Counter + to_PC_Summutor;
-    
-    assign SE_In =     Instr[27:5];
-    
-    assign WD3Option = Instr[29:28];
-    
-    
-    assign SE_Out = {{9{SE_In[22]}}, SE_In};
-    
-    always_comb begin                               //описание мультиплексора для WD
-        case(WD3Option)
-            2'd1: WD = IN;
-            2'd2: WD = SE_Out;
-            2'd3: WD = ALUResult;
-            default: WD = 0;
-        endcase
-    end
-    
-    always_comb begin                               //описание мультиплексора для сумматора
-        case( PC_OptionOR )
-            1'b0: to_PC_Summutor = 8'd1;
-            1'd1: to_PC_Summutor = PC_Jump;
-        endcase
-    end
-    
-    always_ff @(posedge clk)
-        if(!rst)
-            PC_Counter = newPC;
-        else
-            PC_Counter = 0;
-    
-    
-    instr_memory InsMem(
-        .A(PC_Counter),
-        .D(Instr)
-    );
-    
-    memory Mem(
-        .clk,
-        .adr1( Addr1 ),
-        .adr2( Addr2 ),
-        .adr3( Addr3 ),
-        .wd  ( WD ),
-        .we  ( WriteEn),
-        .rd1 ( Operand1),
-        .rd2 ( Operand2)
-    );
     
     alu_riscv ALU(
-        .A     ( Operand1 ),
-        .B     ( Operand2 ),
-        .ALUOp ( Operation ),
-        .Flag  ( ALUFlag ),
-        .Result( ALUResult )
+        A(Operand1),
+        B(Operand2),
+        ALUOp(alu_op_o),
+        Flag(comp),
+        Result(ALUResult)
     );
+
+///////////////////////////////////////////
+
+///////////////////////////////////////////
+
+    logic        WE_DM;
     
+    logic [31:0] A_DM;
+    logic [31:0] D_DM;
+    
+    logic [31:0] RD_DM;
+    
+    assign       WE_DM = mem_we_o;
+    assign       A_DM = ALUResult;
+    assign       D_DM = rd2;
+    
+    DataMemmory DM(
+        clk,
+        WE(WE_DM),
+        mem_req_o,
+        mem_size_o,
+        A(A_DM),
+        D(D_DM),
+        RD(RD_DM)
+    );
+
+///////////////////////////////////////////
+
+    logic [31:0] imm_I;
+    logic [31:0] imm_S;
+    logic [31:0] imm_J;
+    logic [31:0] imm_B;
+    
+    assign       imm_I = Instr[31:20]; // nugno li rashirit nulami? gde est znakorashirenie?
+    assign       imm_S = { Instr[31:25], Instr[11:7] };
+    assign       imm_J = { Instr[31], Instr[19:12], Instr[20], Instr[30:21] };
+    assign       imm_B = { Instr[31], Instr[7], Instr[30:25], Instr[11:8] };
+    
+    
+       
+    
+    always_comb begin
+        case(ex_op_a_sel_o)
+            2'd0: Operand1 = rd1;
+            2'd1: Operand1 = PC_Line;
+            2'd2: Operand1 = 0;
+        endcase
+    end
+      
+    always_comb begin
+        case(ex_op_b_sel_o)
+            3'd0: Operand2 = rd2;
+            3'd1: Operand2 = imm_I;
+            3'd2: Operand2 = { Instr[31:12], 22'b0 };
+            3'd3: Operand2 = imm_S;
+            3'd4: Operand2 = 32'd4;
+        endcase
+    end
+    
+    
+    
+    assign wd = wb_src_sel_o == 1 ? RD_DM : ALUResult;
+    
+    
+    logic [31:0] jump_info;
+    assign       jump_info = branch_o == 1 ? imm_B : imm_J;
+    
+    logic [31:0] to_summator;
+    assign       to_summator = ( jal_o | ( branch_o & comp ) ) == 1 ? jump_info : 32'd4;
+    
+    logic [31:0] from_summator;
+    assign       from_summator = to_summator + PC_Line;
+    
+    logic [31:0] to_PC;
+    assign       to_PC = jalr_o == 1 ? ( rd1 + imm_I ) : from_summator;
+    
+    
+    always @(posedge clk or posedge rst) begin
+        if(rst == 1) PC_Line = 0;
+        else PC_Line = to_PC;
+    end
     
 endmodule
