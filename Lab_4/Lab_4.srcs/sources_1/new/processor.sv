@@ -113,7 +113,7 @@ module processor(
     assign       A_DM = ALUResult;
     assign       D_DM = rd2;
     
-    DataMemmory DM(
+    DataMemory DM(
         clk,
         WE(WE_DM),
         mem_req_o,
