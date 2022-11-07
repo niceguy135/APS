@@ -2,10 +2,7 @@
 
 module processor(
     input         clk,
-    input         rst,
-    input  [15:0] SW,
-    input         BTNC,
-    output [15:0] LED
+    input         rst
     );
     
 
@@ -14,14 +11,13 @@ module processor(
     logic [31:0]  Instr;
     
     instr_memory InstMem(
-        A(PC_Line),
-        D(Instr)
+        .A(PC_Line),
+        .D(Instr)
     );
 ////////////////////////////////////////////
     
     
 ////////////////////////////////////////////  Описание входящего и выходящих сигналов из дешифратора
-    logic         fetched_instr_i;  
     logic [1:0]   ex_op_a_sel_o;      
     logic [2:0]   ex_op_b_sel_o;      
     logic [4:0]   alu_op_o;           
@@ -35,22 +31,20 @@ module processor(
     logic         jal_o;              
     logic         jalr_o;
     
-    assign fetched_instr_i = Instr;
-    
     decoder_riscv Decode(
-        fetched_instr_i,  
-        ex_op_a_sel_o,      
-        ex_op_b_sel_o,      
-        alu_op_o,           
-        mem_req_o,          
-        mem_we_o,           
-        mem_size_o,         
-        gpr_we_a_o,         
-        wb_src_sel_o,       
-        illegal_instr_o,    
-        branch_o,           
-        jal_o,              
-        jalr_o
+        .fetched_instr_i(Instr),  
+        .ex_op_a_sel_o,      
+        .ex_op_b_sel_o,      
+        .alu_op_o,           
+        .mem_req_o,          
+        .mem_we_o,           
+        .mem_size_o,         
+        .gpr_we_a_o,         
+        .wb_src_sel_o,       
+        .illegal_instr_o,    
+        .branch_o,           
+        .jal_o,              
+        .jalr_o
     );
 ///////////////////////////////////////////
 
@@ -91,11 +85,11 @@ module processor(
     logic [31:0] ALUResult;
     
     alu_riscv ALU(
-        A(Operand1),
-        B(Operand2),
-        ALUOp(alu_op_o),
-        Flag(comp),
-        Result(ALUResult)
+        .A(Operand1),
+        .B(Operand2),
+        .ALUOp(alu_op_o),
+        .Flag(comp),
+        .Result(ALUResult)
     );
 
 ///////////////////////////////////////////
@@ -114,13 +108,13 @@ module processor(
     assign       D_DM = rd2;
     
     DataMemory DM(
-        clk,
-        WE(WE_DM),
-        mem_req_o,
-        mem_size_o,
-        A(A_DM),
-        D(D_DM),
-        RD(RD_DM)
+        .clk,
+        .WE(WE_DM),
+        .mem_req_o,
+        .mem_size_o,
+        .A(A_DM),
+        .D(D_DM),
+        .RD(RD_DM)
     );
 
 ///////////////////////////////////////////
@@ -132,7 +126,7 @@ module processor(
     
     assign       imm_I = Instr[31:20]; // nugno li rashirit nulami? gde est znakorashirenie?
     assign       imm_S = { Instr[31:25], Instr[11:7] };
-    assign       imm_J = { Instr[31], Instr[19:12], Instr[20], Instr[30:21] };
+    assign       imm_J = { {11{Instr[31]}}, Instr[31], Instr[19:12], Instr[20], Instr[30:21], 1'b0 };
     assign       imm_B = { Instr[31], Instr[7], Instr[30:25], Instr[11:8] };
     
     

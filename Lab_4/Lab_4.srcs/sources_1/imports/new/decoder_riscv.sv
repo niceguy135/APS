@@ -73,29 +73,61 @@ module decoder_riscv (
                case(func7)
                    7'h00:
                         case(func3)
-                              3'h0: alu_op_o      <= ADD;
+                              3'h0: begin
+                                alu_op_o      <= ADD;
+                                illegal_instr_o <= 0;
+                              end
                                     
-                              3'h4: alu_op_o      <= XXOR;
+                              3'h4: begin
+                                alu_op_o      <= XXOR;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h6: alu_op_o      <= OOR;
+                              3'h6: begin
+                                alu_op_o      <= OOR;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h7: alu_op_o      <= AAND;
+                              3'h7: begin
+                                alu_op_o      <= AAND;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h1: alu_op_o      <= SLL;
+                              3'h1: begin
+                                alu_op_o      <= SLL;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h5: alu_op_o      <= SRL;
+                              3'h5: begin
+                                alu_op_o      <= SRL;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h2: alu_op_o      <= SLT;
+                              3'h2: begin
+                                alu_op_o      <= SLT;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h3: alu_op_o      <= SLTU;
+                              3'h3: begin
+                                alu_op_o      <= SLTU;
+                                illegal_instr_o <= 0;
+                                end
                               
                               default: illegal_instr_o <= 1;
                         endcase
                    
                    7'h20:
                         case(func3)
-                              3'h0: alu_op_o      <= SUB;
-                              3'h5: alu_op_o      <= SRA;
+                              3'h0: begin
+                                alu_op_o      <= SUB;
+                                illegal_instr_o <= 0;
+                                end
+                                
+                              3'h5: begin
+                                alu_op_o      <= SRA;
+                                illegal_instr_o <= 0;
+                                end
+                                
                               default: illegal_instr_o <= 1;
                         endcase
                         
@@ -122,33 +154,120 @@ module decoder_riscv (
                 case(func7)
                    7'h00:
                         case(func3)
-                              3'h1: alu_op_o      <= SLL;
+                              3'h1: begin
+                                alu_op_o      <= SLL;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h5: alu_op_o      <= SRL;
+                              3'h5: begin
+                                alu_op_o      <= SRL;
+                                illegal_instr_o <= 0;
+                                end
+                               
+                              3'h0: begin
+                                alu_op_o      <= ADD;
+                                illegal_instr_o <= 0;
+                                end
+                                    
+                              3'h4: begin
+                                alu_op_o      <= XXOR;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h6: begin
+                                alu_op_o      <= OOR;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h7: begin
+                                alu_op_o      <= AAND;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h2: begin
+                                alu_op_o      <= SLT;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h3: begin
+                                alu_op_o      <= SLTU;
+                                illegal_instr_o <= 0;
+                                end
                               
                               default: illegal_instr_o <= 1;
                         endcase
                         
                    7'h20:           
                         case(func3)
-                              3'h5: alu_op_o      <= SRA;
+                              3'h5: begin
+                                alu_op_o      <= SRA;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h0: begin
+                                alu_op_o      <= ADD;
+                                illegal_instr_o <= 0;
+                                end
+                                    
+                              3'h4: begin
+                                alu_op_o      <= XXOR;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h6: begin
+                                alu_op_o      <= OOR;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h7: begin
+                                alu_op_o      <= AAND;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h2: begin
+                                alu_op_o      <= SLT;
+                                illegal_instr_o <= 0;
+                                end
+                              
+                              3'h3: begin
+                                alu_op_o      <= SLTU;
+                                illegal_instr_o <= 0;
+                                end
                               
                               default: illegal_instr_o <= 1;
                         endcase
                    
                    default:
                         case(func3)
-                              3'h0: alu_op_o      <= ADD;
+                              3'h0: begin
+                                alu_op_o      <= ADD;
+                                illegal_instr_o <= 0;
+                                end
                                     
-                              3'h4: alu_op_o      <= XXOR;
+                              3'h4: begin
+                                alu_op_o      <= XXOR;
+                                illegal_instr_o <= 0;
+                                end
                               
-                              3'h6: alu_op_o      <= OOR;
+                              3'h6: begin
+                                alu_op_o      <= OOR;
+                                illegal_instr_o <= 0;
+                                end
                               
-                              3'h7: alu_op_o      <= AAND;
+                              3'h7: begin
+                                alu_op_o      <= AAND;
+                                illegal_instr_o <= 0;
+                                end
                               
-                              3'h2: alu_op_o      <= SLT;
+                              3'h2: begin
+                                alu_op_o      <= SLT;
+                                illegal_instr_o <= 0;
+                                end
                               
-                              3'h3: alu_op_o      <= SLTU;
+                              3'h3: begin
+                                alu_op_o      <= SLTU;
+                                illegal_instr_o <= 0;
+                                end
                               
                               default: illegal_instr_o <= 1;
                         endcase
@@ -171,11 +290,26 @@ module decoder_riscv (
 ///////////////////////////////////////////////////////////////////////////////////
           7'b0000011: begin                         // Load from memory
                 case(func3)
-                   7'h00: mem_size_o   <= 3'd0;
-                   7'h01: mem_size_o   <= 3'd1;
-                   7'h02: mem_size_o   <= 3'd2;
-                   7'h04: mem_size_o   <= 3'd4;
-                   7'h05: mem_size_o   <= 3'd5;
+                   7'h00: begin
+                    mem_size_o   <= 3'd0;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h01: begin
+                    mem_size_o   <= 3'd1;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h02: begin
+                    mem_size_o   <= 3'd2;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h04: begin
+                    mem_size_o   <= 3'd4;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h05: begin
+                    mem_size_o   <= 3'd5;
+                    illegal_instr_o <= 0;
+                    end
                    default: illegal_instr_o <= 1;
                 endcase
                
@@ -195,9 +329,18 @@ module decoder_riscv (
 ///////////////////////////////////////////////////////////////////////////////////
           7'b0100011: begin                         // Save to memory
                 case(func3)
-                   7'h00: mem_size_o   <= 3'd0;
-                   7'h01: mem_size_o   <= 3'd1;
-                   7'h02: mem_size_o   <= 3'd2;
+                   7'h00: begin
+                    mem_size_o   <= 3'd0;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h01: begin
+                    mem_size_o   <= 3'd1;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h02: begin
+                    mem_size_o   <= 3'd2;
+                    illegal_instr_o <= 0;
+                    end
                    default: illegal_instr_o <= 1;
                 endcase
                
@@ -217,12 +360,30 @@ module decoder_riscv (
 ///////////////////////////////////////////////////////////////////////////////////
           7'b1100011: begin                         // Branches (B-operations)
                 case(func3)
-                   7'h00: alu_op_o      <= BEQ;
-                   7'h01: alu_op_o      <= BNE;
-                   7'h04: alu_op_o      <= BLT;
-                   7'h05: alu_op_o      <= BGE;
-                   7'h06: alu_op_o      <= BLTU;
-                   7'h07: alu_op_o      <= BGEU;
+                   7'h00: begin
+                    alu_op_o      <= BEQ;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h01: begin
+                    alu_op_o      <= BNE;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h04: begin
+                    alu_op_o      <= BLT;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h05: begin
+                    alu_op_o      <= BGE;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h06: begin
+                    alu_op_o      <= BLTU;
+                    illegal_instr_o <= 0;
+                    end
+                   7'h07: begin
+                    alu_op_o      <= BGEU;
+                    illegal_instr_o <= 0;
+                    end
                    default: illegal_instr_o <= 1;
                 endcase
                

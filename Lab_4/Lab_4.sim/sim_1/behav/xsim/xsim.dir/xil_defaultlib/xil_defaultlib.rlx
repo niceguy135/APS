@@ -1,0 +1,12 @@
+0.6
+2019.2
+Nov  6 2019
+21:57:16
+C:/Users/8200390/Desktop/Architechture/APS/ALU_2/ALU_2.srcs/sources_1/new/alu_riscv.sv,1667821944,systemVerilog,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/imports/new/decoder_riscv.sv,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/imports/new/decoder_riscv.sv,,ALUOps;alu_riscv,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.sim/sim_1/behav/xsim/glbl.v,1667821944,verilog,,,,glbl,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sim_1/new/tb_processor.sv,1667828395,systemVerilog,,,,tb_processor,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/imports/new/decoder_riscv.sv,1667831116,systemVerilog,,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/instr_memory.sv,,decoder_riscv,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/DataMemory.sv,1667821944,systemVerilog,,C:/Users/8200390/Desktop/Architechture/APS/ALU_2/ALU_2.srcs/sources_1/new/alu_riscv.sv,,DataMemory,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/instr_memory.sv,1667825487,systemVerilog,,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/memory.sv,,instr_memory,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/memory.sv,1667821944,systemVerilog,,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/processor.sv,,memory,,,,,,,,
+C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sources_1/new/processor.sv,1667830351,systemVerilog,,C:/Users/8200390/Desktop/Architechture/APS/Lab_4/Lab_4.srcs/sim_1/new/tb_processor.sv,,processor,,,,,,,,

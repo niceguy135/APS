@@ -13,7 +13,7 @@ module instr_memory #(
     logic [WIDTH-1:0] ROM [0:DEPTH-1];
     
     initial
-        $readmemb("programs.mem",ROM,0,DEPTH-1);
+        $readmemh("programs.mem",ROM,0,DEPTH-1);
         
     assign D = ROM[wordAdrr];
     
